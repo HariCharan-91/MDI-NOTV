@@ -2,13 +2,9 @@ import os
 import requests
 from tqdm import tqdm
 
-# Define directories
-HUMAN_PARSING_DIR = "ckpt\humanparsing"
-OPENPOSE_CKPTS_DIR = "ckpt\openpose\ckpts"
-
-# Create folders if they don't exist
-os.makedirs(HUMAN_PARSING_DIR, exist_ok=True)
-os.makedirs(OPENPOSE_CKPTS_DIR, exist_ok=True)
+# Define directories (assuming they already exist)
+HUMAN_PARSING_DIR = "ckpt/humanparsing"
+OPENPOSE_CKPTS_DIR = "ckpt/openpose/ckpts"
 
 # List of files to download (URL -> Save As)
 files = {
@@ -45,8 +41,13 @@ def download_file(url, save_path):
 def download_models():
     """Downloads all necessary models and replaces them if they exist."""
     for url, path in files.items():
+        if not os.path.exists(path):
+            print(f"ℹ️ {path} does not exist. Downloading...")
+        else:
+            print(f"🔄 {path} already exists. Replacing with a fresh copy...")
+            
         download_file(url, path)
 
 if __name__ == "__main__":
     download_models()
-    print("\n✅ All files downloaded successfully and saved in the correct folders.")
+    print("\n✅ All files downloaded and replaced successfully.")
